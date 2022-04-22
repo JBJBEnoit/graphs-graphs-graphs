@@ -4,7 +4,7 @@
 
 using namespace std;
 
-unsigned connected_components(Graph g)
+unsigned connected_components(Undirected_Graph g)
 {
 	vector<bool> visited(g.numVertices);
 	unsigned count = 0;
@@ -20,7 +20,7 @@ unsigned connected_components(Graph g)
 	return count;
 }
 
-unsigned connected_components(Graph g, vector<int>& components)
+unsigned connected_components(Undirected_Graph g, vector<int>& components)
 {
 	vector<bool> visited(g.numVertices);
 	unsigned count = 0;

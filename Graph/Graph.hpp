@@ -13,6 +13,12 @@ struct adjNode {
 
 struct Edge {
 	int start_vertex, end_vertex, weight;
+	Edge(int start, int end, int weight)
+	{
+		this->start_vertex = start;
+		this->end_vertex = end;
+		this->weight = weight;
+	}
 };
 
 class Graph {
@@ -34,7 +40,7 @@ public:
 	Graph(std::vector<Edge>& edges, unsigned numVertices)
 	{
 		this->numVertices = numVertices;
-
+		this->adj = std::vector<std::list<adjNode*>>(numVertices);
 		// Add nodes to adjacency list
 		for (const auto& e : edges)
 		{
@@ -59,10 +65,43 @@ public:
 	}
 };
 
+class Undirected_Graph
+{
+	adjNode* addAdjNode(int val, int weight)
+	{
+		adjNode* node = new adjNode;
+		node->val = val;
+		node->weight = weight;
+		return node;
+	}
+
+public:
+	unsigned numVertices; // number of vertices in graph
+	std::vector<std::list<adjNode*>> adj; //array of pointers for adjacency list
+
+	Undirected_Graph(std::vector<Edge>& edges, unsigned numVertices)
+	{
+		this->numVertices = numVertices;
+		this->adj = std::vector<std::list<adjNode*>>(numVertices);
+		// Add nodes to adjacency list
+		for (const auto& e : edges)
+		{
+			int start = e.start_vertex;
+			int end = e.end_vertex;
+			int weight = e.weight;
+			adjNode* newNode = addAdjNode(end, weight);
+			adj[start].push_front(newNode);
+			adjNode* newNode2 = addAdjNode(start, weight);
+			adj[end].push_front(newNode2);
+		}
+	}
+};
+
 //prototypes
 void dfs(Graph g, std::vector<bool>& visited, int start);
-void dfs_components(Graph g, std::vector<bool>& visited, int start, std::vector<int>& components);
-unsigned connected_components(Graph g);
-unsigned connected_components(Graph g, std::vector<int>& components);
+void dfs_components(Undirected_Graph g, std::vector<bool>& visited, int start, std::vector<int>& components);
+void dfs(Undirected_Graph g, std::vector<bool>& visited, int start);
+unsigned connected_components(Undirected_Graph g);
+unsigned connected_components(Undirected_Graph g, std::vector<int>& components);
 
 #endif
