@@ -6,9 +6,9 @@
 #include <list>
 
 struct adjNode {
-	int val = -1;
+	int val = -1; // This will hold an index of 0 to numVertices - 1
 	int weight = -1;
-	std::vector<std::string> data;
+	std::vector<std::string> JSON_data_string; // This is used for any data to be tracked by the vertex
 };
 
 struct Edge {
