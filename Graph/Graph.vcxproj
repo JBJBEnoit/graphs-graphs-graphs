@@ -141,7 +141,7 @@
   <ItemGroup>
     <ClCompile Include="connected_components.cpp" />
     <ClCompile Include="dfs.cpp" />
-    <ClCompile Include="Graph.cpp" />
+    <ClCompile Include="Test_Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graph.hpp" />

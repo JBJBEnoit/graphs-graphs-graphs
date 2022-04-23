@@ -16,9 +16,9 @@ void dfs(Graph g, vector<bool>& visited, int start)
 		
 		if (!visited[cur])
 		{
-			for (adjNode* a : g.adj[cur])
+			for (adjNode a : g.adj[cur])
 			{
-				stack.push(a->val);
+				stack.push(a.id);
 			}
 
 			visited[cur] = true;
@@ -38,9 +38,9 @@ void dfs(Undirected_Graph g, vector<bool>& visited, int start)
 
 		if (!visited[cur])
 		{
-			for (adjNode* a : g.adj[cur])
+			for (adjNode a : g.adj[cur])
 			{
-				stack.push(a->val);
+				stack.push(a.id);
 			}
 
 			visited[cur] = true;
@@ -60,9 +60,9 @@ void dfs_components(Undirected_Graph g, vector<bool>& visited, int start, vector
 
 		if (!visited[cur])
 		{
-			for (adjNode* a : g.adj[cur])
+			for (adjNode a : g.adj[cur])
 			{
-				stack.push(a->val);
+				stack.push(a.id);
 			}
 
 			visited[cur] = true;

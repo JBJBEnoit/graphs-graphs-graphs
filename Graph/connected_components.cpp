@@ -16,7 +16,6 @@ unsigned connected_components(Undirected_Graph g)
 			dfs(g, visited, i);
 		}
 	}
-
 	return count;
 }
 
