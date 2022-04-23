@@ -158,7 +158,7 @@ public:
 
 //prototypes
 void dfs(Graph g, std::vector<bool>& visited, int start);
-void dfs_components(Undirected_Graph g, std::vector<bool>& visited, int start, std::vector<int>& components);
+void dfs_components(Undirected_Graph g, std::vector<bool>& visited, int start, std::vector<int>& components, int count);
 void dfs(Undirected_Graph g, std::vector<bool>& visited, int start);
 unsigned connected_components(Undirected_Graph g);
 unsigned connected_components(Undirected_Graph g, std::vector<int>& components);

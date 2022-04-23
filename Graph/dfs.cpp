@@ -48,7 +48,7 @@ void dfs(Undirected_Graph g, vector<bool>& visited, int start)
 	}
 }
 
-void dfs_components(Undirected_Graph g, vector<bool>& visited, int start, vector<int>& components)
+void dfs_components(Undirected_Graph g, vector<bool>& visited, int start, vector<int>& components, int count)
 {
 	stack<int> stack;
 	stack.push(start);
@@ -66,7 +66,7 @@ void dfs_components(Undirected_Graph g, vector<bool>& visited, int start, vector
 			}
 
 			visited[cur] = true;
-			components[cur] = start;
+			components[cur] = count;
 		}	
 	}
 }

@@ -27,8 +27,8 @@ unsigned connected_components(Undirected_Graph g, vector<int>& components)
 	{
 		if (!visited[i])
 		{
+			dfs_components(g, visited, i, components, count);
 			++count;
-			dfs_components(g, visited, i, components);
 		}
 	}
 
