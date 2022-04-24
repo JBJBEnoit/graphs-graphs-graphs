@@ -7,6 +7,7 @@
 #include <string>
 #include <sstream>
 #include <cassert>
+#include <unordered_set>
 
 // Exception
 struct dataGraphMismatch
@@ -14,7 +15,7 @@ struct dataGraphMismatch
 	int numVertices;
 	std::vector<std::string> JSON_data;
 
-	dataGraphMismatch(int numVertices, std::vector<std::string> const& JSON_data) : numVertices(numVertices), JSON_data(JSON_data) {};
+	dataGraphMismatch(int const numVertices, std::vector<std::string> const& JSON_data) : numVertices(numVertices), JSON_data(JSON_data) {};
 	void msg()
 	{
 		std::cerr << "JSON_data length=" << JSON_data.size() << " is different than number of vertices=" << numVertices << std::endl;
@@ -30,7 +31,7 @@ struct dataGraphMismatch
 struct adjNode {
 	int id = -1; // This will hold an index of 0 to numVertices - 1
 	int weight = -1;
-	adjNode(int id, int weight)
+	adjNode(int const id, int const weight)
 	{
 		this->id = id;
 		this->weight = weight;
@@ -39,7 +40,7 @@ struct adjNode {
 
 struct Edge {
 	int start_vertex, end_vertex, weight;
-	Edge(int start, int end, int weight)
+	Edge(int const start, int const end, int const weight)
 	{
 		this->start_vertex = start;
 		this->end_vertex = end;
@@ -67,7 +68,7 @@ public:
 	std::vector<std::string> JSON_data; // This is used for any data to be tracked by the vertices
 	
 	// Constructors
-	Graph(std::vector<Edge>& edges, unsigned numVertices)
+	Graph(std::vector<Edge>& edges, unsigned const numVertices)
 	{
 		this->numVertices = numVertices;
 		this->adj = std::vector<std::list<adjNode>>(numVertices);
@@ -135,7 +136,7 @@ public:
 	std::vector<std::string> JSON_data; // This is used for any data to be tracked by the vertices
 
 	// Constructors
-	Undirected_Graph(std::vector<Edge>& edges, unsigned numVertices)
+	Undirected_Graph(std::vector<Edge>& edges, unsigned const numVertices)
 	{
 		this->numVertices = numVertices;
 		this->adj = std::vector<std::list<adjNode>>(numVertices);
@@ -144,7 +145,7 @@ public:
 		buildAdjList(edges);
 	}
 
-	Undirected_Graph(std::vector<Edge>& edges, unsigned numVertices, std::vector<std::string>& JSON_data)
+	Undirected_Graph(std::vector<Edge>& edges, unsigned const numVertices, std::vector<std::string>& JSON_data)
 	{
 		assert(numVertices == JSON_data.size() && "JSON_data length does not match number of vertices");
 
@@ -156,11 +157,98 @@ public:
 	}
 };
 
+// A grid is treated as though cells are connected vertices unless the cell contains an 'obstacle'
+// There is no directionality in the sense that the same movement rules apply to every cell
+
+static const int MAX_DIMENSIONS = 5;
+template<class T, size_t numDims>
+class Grid
+{
+	
+	std::vector<unsigned>dimLengths;
+	std::vector<std::vector<int>> directions; // vector of directional vectors, one for each dimension
+	std::vector<unsigned> coordinates;
+	std::vector<T> grid;
+
+	size_t index(std::vector<unsigned> const& coords)
+	{
+		size_t idx = 0;
+
+		// Calculate index in the linear grid vector
+		for (size_t i = 0; i < coords.size(); ++i)
+		{
+			if (i == 0)
+			{
+				idx += coords[i];
+			}
+			else
+			{
+				size_t factor = 1;
+
+				for (size_t j = 0; j < i; ++j)
+				{
+					factor *= dimLengths[j];
+				}
+
+				idx += coords[i] * factor;
+			}
+		}
+
+		return idx;
+	}
+
+	
+public:
+	Grid(std::vector<unsigned>dimLengths, std::vector<std::vector<int>> directions)
+	{
+		size_t gridLen = 1;
+		for (unsigned i : dimLengths)
+		{
+			gridLen *= i;
+		}
+		std::vector<T> vec(gridLen);
+		this->dimLengths.swap(dimLengths);
+		this->directions.swap(directions);
+		this->grid.swap(vec);
+	}
+
+	//Member Functions
+	// Returns pointer to a cell
+	T* getCell(std::vector<unsigned> const& coords)
+	{
+		size_t idx = index(coords);
+
+		return &grid[idx];	
+	}
+
+	// Finds the path with the fewest moves from a start position to any number of end points
+	// Takes obstacles as a set
+	void least_path_mv(std::vector<unsigned> const& start, std::unordered_set<std::vector<unsigned>> const& end, 
+		std::unordered_set< std::vector<unsigned>> const& obstacles, std::vector<size_t>& path)
+	{
+		size_t count = 0;
+
+		// Convert obstacles to a set of integers for faster comparison
+		// NOTE TODO could possible make this more space efficient by storing obstacles in the grid(presumably they are unreachable, so...)
+		std::unordered_set<size_t> obs;
+		if (!obstacles.empty())
+		{
+			for (auto i : obstacles)
+			{
+				obs.insert(index(i));
+			}
+		}
+
+		return count;
+	}
+};
+
 //prototypes
 void dfs(Graph g, std::vector<bool>& visited, int start);
 void dfs_components(Undirected_Graph g, std::vector<bool>& visited, int start, std::vector<int>& components, int count);
 void dfs(Undirected_Graph g, std::vector<bool>& visited, int start);
 unsigned connected_components(Undirected_Graph g);
 unsigned connected_components(Undirected_Graph g, std::vector<int>& components);
+
 
 #endif

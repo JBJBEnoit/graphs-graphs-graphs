@@ -1,2 +1,5 @@
 ﻿  Test_Main.cpp
+  connected_components.cpp
+  dfs.cpp
+  Generating Code...
   Graph.vcxproj -> C:\Users\jsnbe\source\repos\graphalgos\Graph\x64\Debug\Graph.exe

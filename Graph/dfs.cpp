@@ -66,7 +66,7 @@ void dfs_components(Undirected_Graph g, vector<bool>& visited, int start, vector
 			}
 
 			visited[cur] = true;
-			components[cur] = count;
+			components[cur] = count; //components will be assigned a zero-indexed number ex: components[0]=0, components[1]=0 means both are part of component 0
 		}	
 	}
 }

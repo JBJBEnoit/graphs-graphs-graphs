@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Graph.hpp"
 #include <vector>
+#include "boost\multi_array.hpp"
 
 using namespace std;
 
@@ -16,7 +17,10 @@ int main()
 	JSON_data.push_back(R"({ "name":"foo", "height":"2" })");
 	JSON_data.push_back(R"({ "name":"dracula", "height": "3")");
 	JSON_data.push_back(R"({ "name":"bigfoot", "height": "17")");
-
-	Undirected_Graph g(edges, 4, JSON_data);
-	cout << connected_components(g) << endl;
+	vector<vector<int>> dir = { {0, 0, -1, 1}, {-1, 1, 0, 0} };
+	vector<unsigned> lens = { 2, 4, 7 };
+	
+	Grid<char, 4> myGrid({ 3, 2, 3, 3 }, { {1,-1,0,0},{0,0,1,-1} });
+	*myGrid.getCell({ 1,1,2, 0}) = 'a';
+	cout << *myGrid.getCell({ 1, 1, 2, 0 }) << endl;
 }
